@@ -1,13 +1,21 @@
 import React, {Component} from 'react'
 
-class App extends Component {
-
-  renderSquare = (value) => {
+class Square extends Component {
+  render() {
     return (
-      <button className="square"> 
-
+      <button className="square" value={this.props.value} onClick={this.props.update()}> 
+        
       </button>
     )
+  }
+}
+
+class App extends Component {
+
+  state = {}
+
+  renderSquare = (value) => {
+    return <Square value={value} />
   }
 
   render() {
