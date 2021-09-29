@@ -1,50 +1,35 @@
 import React, {Component} from 'react'
-import Table from './tables'
 
 class App extends Component {
 
-  state = {
-    characters: [
-      {
-        name: 'Charlie',
-        job: 'Accountant'
-      },
-      {
-        name: 'John',
-        job: 'Musician'
-      }
-    ]
-  }
+  renderSquare = (value) => {
+    return (
+      <button className="square"> 
 
-  removeCharacter = (index) => {
-    const {characters} = this.state
-
-    this.setState({
-      characters: characters.filter((character, i) => {
-        return i !== index
-      }),
-    })
+      </button>
+    )
   }
 
   render() {
 
-    /*const characters = [
-      {
-        name: 'Charlie',
-        job:  'Accountant',
-      },
-      {
-        name: 'John',
-        job:  'Accountant'
-      }
-    ]*/
-
-    const { characters } = this.state
-
     return (
 
-      <div className="container">
-        <Table characterData={characters} removeCharacter={this.removeCharacter}/>
+      <div className="app-container">
+        <tr>
+          {this.renderSquare(1)}
+          {this.renderSquare(2)}
+          {this.renderSquare(3)}
+        </tr>
+        <tr>
+          {this.renderSquare(4)}
+          {this.renderSquare(5)}
+          {this.renderSquare(6)}
+        </tr>
+        <tr>
+          {this.renderSquare(7)}
+          {this.renderSquare(8)}
+          {this.renderSquare(9)}
+        </tr>
       </div>
 
     )
