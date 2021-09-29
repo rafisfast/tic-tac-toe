@@ -1,10 +1,13 @@
 import React, {Component} from 'react'
 
 class Square extends Component {
+
+  state = {value: null}
+
   render() {
     return (
-      <button className="square" value={this.props.value} onClick={this.props.update()}> 
-        
+      <button className="square" onClick={() => {console.log("clicked"); this.setState({value: 'X'})}}> 
+        {this.state.value}
       </button>
     )
   }
@@ -23,6 +26,7 @@ class App extends Component {
     return (
 
       <div className="app-container">
+        <tr>Next player: X</tr>
         <tr>
           {this.renderSquare(1)}
           {this.renderSquare(2)}
