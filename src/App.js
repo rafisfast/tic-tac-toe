@@ -34,42 +34,17 @@ function calculateWinner (squares) {
   return null;
 }
 
-class App extends Component {
-
-  state = {
-    squares: Array(9).fill(null),
-    XIsNext: false
-  }
-
-  clicked = (value) => {
-    console.log("clicked inside");
-    const sq = this.state.squares.slice();
-    if (calculateWinner(sq) && sq[value]) {
-      return;
-    }
-    sq[value] = this.state.XIsNext ? "X" : "O";
-    this.setState({squares: sq, XIsNext: !this.state.XIsNext});
-  }
+class Board extends Component {
 
   renderSquare = (value) => {
-    return <Square value={this.state.squares[value]} onClick={() => this.clicked(value)}/>
+    return <Square value={this.props.squares[value]} onClick={() => this.props.clicked(value)}/>
   } 
 
   render() {
 
-    let status;
-    const winner = calculateWinner(this.state.squares.slice())
-
-    if (winner) {
-      status = "Winner is " + winner
-    } else {
-      status = "Next player:" + (this.state.XIsNext ? "X" : "O")
-    }
-
     return (
 
-      <div className="app-container">
-        <tr>{status}</tr>
+      <div className="board">
         <tr>
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -89,6 +64,68 @@ class App extends Component {
 
     )
   }
+}
+
+class App extends Component {
+  
+  state = {
+    history : [{squares: Array(9).fill(null)}],
+    XIsNext: false,
+    stepNumber: 0
+  }
+
+  clicked = (value) => {
+    console.log("clicked inside");
+    const history = this.state.history.slice(0,this.state.stepNumber + 1)
+    const current = history[history.length - 1]
+    const squares = current.squares.slice()
+    if (calculateWinner(squares) && squares[value]) {
+      return;
+    }
+    squares[value] = this.state.XIsNext ? "X" : "O";
+    this.setState(
+      {history: history.concat([{squares: squares}]), XIsNext: !this.state.XIsNext, stepNumber: history.length});
+  }
+
+  jumpTo = (move) => {
+    this.setState({stepNumber: move, XIsNext: (move % 2) === 0})
+  }
+
+  render() {
+
+    let status;
+    const history = this.state.history
+    const current = history[this.state.stepNumber]
+    const winner = calculateWinner(current.squares.slice())
+
+    if (winner) {
+      status = "Winner is " + winner
+    } else {
+      status = "Next player:" + (this.state.XIsNext ? "X" : "O")
+    }
+
+    const moves = history.map((step,move) => {
+      const desc = move ? 
+      "Go to move" + move :
+      "Go to game start";
+      return (
+        <li>
+          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+        </li>
+      );
+    })
+
+    return(
+      <div>
+        <div>
+          <Board squares={current.squares} clicked={this.clicked}/>
+        </div>
+        <div>{status}</div>
+        <div>{moves}</div>
+      </div>
+    )
+  }
+
 }
 
 export default App
